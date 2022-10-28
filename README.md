@@ -1,6 +1,7 @@
 # flutter_verification
 
 A new Flutter project.
+検証用のプロジェクト
 
 ## Getting Started
 
