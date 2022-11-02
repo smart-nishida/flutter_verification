@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -76,13 +77,26 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final _key = GlobalKey();
+  Size aspectContainerSize = Size(0, 0);
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        aspectContainerSize = _key.currentContext!.size!;
+      });
+      print("AspectRatio直下のコンテナのサイズは height: ${aspectContainerSize!.height} width: ${aspectContainerSize!.width}");
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final height = size.height;
     final width = size.width;
-    print("height: $height");
-    print("width: $width");
+    print("画面全体のサイズは height: $height width: $width");
 
     return Container(
       color: Colors.white,
@@ -101,40 +115,54 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar: AppBar(
               title: Text(widget.title),
             ),
-            body: ScreenUtilInit(
-
-              // designSize: const Size(1080, 2400), // 9:20
-              /// aspectRatioで設定している論理ピクセルと合わせるパターン(画面縦横の長さのMAXをいくつと想定するかの設定)
-              /// 問題点: 0.5.shとしても、画面全体の50%という取り方になる為、アスペクト調整したコンテナのサイズをMAXとして比率でサイズ指定をしたい
-              designSize: const Size(360.0, 752.0),
-
-              builder: (context, child) => Container( //TODO このコンテナの縦横の長さを知りたい
+            body: Container( //TODO このコンテナの縦横の長さを知りたい
+                key: _key,
                 color: Colors.grey,
                 child: Center(
-                  child: Container(
-                    // height: 360.h,
-                    height: 200.h,
-                    // width: 0.3.sw,
-                    width: 300.w,
-                    color: Colors.cyanAccent,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'You have pushed the button this many times:',
+                  child: Column(
+                    children: [
+                      Container(
+                        height: aspectContainerSize!.height * 0.5,
+                        width: 300,
+                        color: Colors.cyanAccent,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'You have pushed the button this many times:',
+                              ),
+                              Text(
+                                '$_counter',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ],
                           ),
-                          Text(
-                            '$_counter',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Container(
+                        height: aspectContainerSize!.height * 0.5,
+                        width: 300,
+                        color: Colors.red,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                'You have pushed the button this many times:',
+                              ),
+                              Text(
+                                '$_counter',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
             floatingActionButton: FloatingActionButton(
               onPressed: _incrementCounter,
               tooltip: 'Increment',
