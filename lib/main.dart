@@ -112,9 +112,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey,
                 child: Center(
                   child: Container(
+                    // height: 360.h,
                     height: 200.h,
-                    // height: 0.5.sh,
-                    width: 200.w,
+                    // width: 0.3.sw,
+                    width: 300.w,
                     color: Colors.cyanAccent,
                     child: Center(
                       child: Column(

@@ -1,30 +1,42 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_verification/main.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testGoldens("app", (WidgetTester tester) async {
+    // pubspecに記載したフォントの読込み
+    await loadAppFonts();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // 複数の解像度でスクリーンショットをビルドする
+    await tester.pumpWidgetBuilder(MyApp());
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await multiScreenGolden(
+      tester,
+      'myApp',
+      devices: [
+        /// 配列で複数解像度を追加していく
+        /// 縦横のサイズはロジカルピクセルっぽい
+        const Device(
+          name: '9_16', //9:16
+          // size: Size(360, 640),
+          size: Size(375.0, 619.0), //エミュレータでMediaQueryから取得した論理ピクセル
+        ),
+        const Device(
+          name: '9_19.5', //9:19.5
+          // size: Size(360, 780),
+          size: Size(414.0, 848.0), //エミュレータでMediaQueryから取得した論理ピクセル
+        ),
+        const Device(
+          name: '9_20', //9:20
+          size: Size(360, 752), //エミュレータでMediaQueryから取得した論理ピクセル
+        ),
+      ],
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // マスターのスクリーンショットと現在のスクリーンショットと同じかテストする。第二引数は生成されるスクリーンショットのファイル名
+    await screenMatchesGolden(tester, "myApp");
   });
+
 }
