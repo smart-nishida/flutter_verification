@@ -1,7 +1,13 @@
 # flutter_verification
 
-A new Flutter project.
-検証用のプロジェクト
+G2T5A1(スケールのチャレンジ)の見た目の作成(G2T5A1C1-003)
+まず、figmaで作成されているpixel 5aの画面比率でG2T5A1C1-003の画面を作ってみる
+それを色々な画面比率で、確認して各パーツの位置のずれ、大きさ、縦横比率に問題がないかを確認する
+
+論理ピクセル = 1dp
+pixel 5a (411, 898)
+pixel 3a (392, 808)
+iphoneSE3 (375, 619)
 
 ## Getting Started
 
