@@ -78,15 +78,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final _key = GlobalKey();
-  Size aspectContainerSize = Size(0, 0);
+  Size containerSize = Size(0, 0);
 
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        aspectContainerSize = _key.currentContext!.size!;
+        containerSize = _key.currentContext!.size!;
       });
-      print("AspectRatio直下のコンテナのサイズは height: ${aspectContainerSize!.height} width: ${aspectContainerSize!.width}");
+      print("AspectRatio直下のコンテナのサイズは height: ${containerSize!.height} width: ${containerSize!.width}");
     });
     super.initState();
   }
@@ -115,15 +115,15 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar: AppBar(
               title: Text(widget.title),
             ),
-            body: Container( //TODO このコンテナの縦横の長さを知りたい
-                key: _key,
+            body: Container(
+                key: _key, // このコンテナの縦横の長さを把握するために使用
                 color: Colors.grey,
                 child: Center(
                   child: Column(
                     children: [
                       Container(
-                        height: aspectContainerSize!.height * 0.5,
-                        width: 300,
+                        height: containerSize!.height * 0.5,
+                        width: containerSize!.width * 0.5,
                         color: Colors.cyanAccent,
                         child: Center(
                           child: Column(
@@ -141,8 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       Container(
-                        height: aspectContainerSize!.height * 0.5,
-                        width: 300,
+                        height: containerSize!.height * 0.5,
+                        width: containerSize!.width * 0.3,
                         color: Colors.red,
                         child: Center(
                           child: Column(
